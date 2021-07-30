@@ -7,6 +7,7 @@ import java.net.Socket;
 public class SendClientThread extends Thread {
     
     Socket ssocket;
+    public volatile boolean exit = false; 
 
     public SendClientThread(Socket s) {
         ssocket = s;
@@ -14,7 +15,7 @@ public class SendClientThread extends Thread {
 
     public void run() {
         try {
-            while(true){
+            while(!exit){
                 String msg = null;
                 msg = ChatServer.allSocketQueue.get(ssocket).poll();
                 
@@ -27,6 +28,7 @@ public class SendClientThread extends Thread {
                 msg += "\r\n";
                 out.write(msg.getBytes());
                 out.flush();
+
             }
             
         } catch (IOException e) {

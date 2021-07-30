@@ -11,6 +11,7 @@ public class ReceiveClientThread extends Thread {
     
     Socket ssocket;
     private ConcurrentLinkedQueue<String> rQueue;
+    public volatile boolean exit = false; 
 
     public ReceiveClientThread(Socket s, ConcurrentLinkedQueue<String> receiveQueue) {
         ssocket = s;
@@ -37,6 +38,11 @@ public class ReceiveClientThread extends Thread {
                 String line = null;
                 line = bufferinput.readLine();
                 rQueue.offer(line);
+
+                if(line.equals("/quit")){
+                    break;
+                }
+
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
